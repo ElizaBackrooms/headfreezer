@@ -10,10 +10,11 @@ GEMINI_MODEL=nano-banana-pro-preview
 FRONTEND_URL=https://www.241543903.xyz
 ```
 
-## Frontend Domain
+## URLs
 
 - **Frontend**: https://www.241543903.xyz
-- **Backend**: https://headfreezer.onrender.com
+- **Backend API**: https://headfreezer.onrender.com
+- **API Endpoint**: https://headfreezer.onrender.com/api/generate-meme
 
 ## CORS Configuration
 
