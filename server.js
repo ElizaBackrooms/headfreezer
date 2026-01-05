@@ -34,11 +34,11 @@ app.get('/health', (req, res) => {
 app.post('/api/generate-meme', async (req, res) => {
   try {
     const { imageData, prompt } = req.body;
-    const apiKey = process.env.BANANA_PRO_API_KEY || process.env.GEMINI_API_KEY;
-    const apiProvider = process.env.IMAGE_API_PROVIDER || 'banana'; // 'banana' or 'gemini'
+    const apiKey = process.env.GOOGLE_API_KEY || process.env.GEMINI_API_KEY;
+    const geminiModel = process.env.GEMINI_MODEL || 'nano-banana-pro-preview';
 
     if (!apiKey) {
-      return res.status(500).json({ error: 'API key not configured. Set BANANA_PRO_API_KEY or GEMINI_API_KEY' });
+      return res.status(500).json({ error: 'API key not configured. Set GOOGLE_API_KEY or GEMINI_API_KEY' });
     }
 
     if (!imageData || !prompt) {
@@ -48,113 +48,56 @@ app.post('/api/generate-meme', async (req, res) => {
     // Enhanced prompt for image generation
     const enhancedPrompt = `Transform this image into the viral "241543903" meme (Heads in Freezers meme). The person in the image should appear to be sticking their head inside a refrigerator/freezer, surrounded by frozen food items, ice, and frost. Create a realistic composite that looks like they're actually inside a freezer with their head among frozen vegetables, ice cream, and other frozen goods. Make it humorous and true to the original meme aesthetic. Ensure the lighting and perspective match a typical refrigerator interior view. High quality, photorealistic, detailed.`;
 
-    if (apiProvider === 'banana') {
-      // Use Banana Pro / Nano Banana API
-      // Common endpoints: https://api.ulazai.com/v1/images/generations or similar
-      const bananaEndpoint = process.env.BANANA_API_ENDPOINT || 'https://api.ulazai.com/v1/images/generations';
-      
-      const base64Image = imageData.includes(',') ? imageData.split(',')[1] : imageData;
-      
-      const response = await fetch(bananaEndpoint, {
+    const base64Image = imageData.includes(',') ? imageData.split(',')[1] : imageData;
+
+    // Use Gemini with nano-banana-pro-preview model
+    const response = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/${geminiModel}:generateContent?key=${apiKey}`,
+      {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${apiKey}`,
         },
         body: JSON.stringify({
-          model: 'nano-banana-pro',
-          prompt: enhancedPrompt,
-          image: base64Image, // Base64 input image
-          num_images: 1,
-          size: '1024x1024',
-          response_format: 'b64_json'
+          contents: [{
+            parts: [
+              { text: enhancedPrompt },
+              {
+                inline_data: {
+                  mime_type: 'image/jpeg',
+                  data: base64Image
+                }
+              }
+            ]
+          }],
+          generationConfig: {
+            temperature: 1,
+            topK: 40,
+            topP: 0.95,
+            maxOutputTokens: 8192,
+            response_modalities: ['Image']
+          }
         })
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      console.error('Gemini API Error:', data);
+      return res.status(response.status).json({ 
+        error: data.error?.message || data.error || 'Failed to generate image' 
       });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        return res.status(response.status).json({ 
-          error: data.error?.message || data.error || 'Failed to generate image' 
-        });
-      }
-
-      // Banana Pro typically returns images in data array
-      if (data.data && data.data[0] && data.data[0].b64_json) {
-        return res.json({
-          candidates: [{
-            content: {
-              parts: [{
-                inlineData: {
-                  mimeType: 'image/png',
-                  data: data.data[0].b64_json
-                }
-              }]
-            }
-          }]
-        });
-      } else if (data.image || data.url) {
-        // Some APIs return URL or direct image data
-        return res.json({
-          candidates: [{
-            content: {
-              parts: [{
-                inlineData: {
-                  mimeType: 'image/png',
-                  data: data.image || data.url
-                }
-              }]
-            }
-          }]
-        });
-      } else {
-        console.error('Unexpected Banana Pro response:', data);
-        return res.status(500).json({ error: 'Unexpected response format from Banana Pro API' });
-      }
-    } else {
-      // Fallback to Gemini (original code)
-      const base64Image = imageData.includes(',') ? imageData.split(',')[1] : imageData;
-
-      const response = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent?key=${apiKey}`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            contents: [{
-              parts: [
-                { text: enhancedPrompt },
-                {
-                  inline_data: {
-                    mime_type: 'image/jpeg',
-                    data: base64Image
-                  }
-                }
-              ]
-            }],
-            generationConfig: {
-              temperature: 1,
-              topK: 40,
-              topP: 0.95,
-              maxOutputTokens: 8192,
-              response_modalities: ['Image']
-            }
-          })
-        }
-      );
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        return res.status(response.status).json({ 
-          error: data.error?.message || 'Failed to generate image' 
-        });
-      }
-
-      res.json(data);
     }
+
+    // Log response for debugging
+    console.log('Gemini API Response structure:', {
+      hasCandidates: !!data.candidates,
+      candidateCount: data.candidates?.length,
+      hasParts: !!data.candidates?.[0]?.content?.parts
+    });
+
+    res.json(data);
   } catch (error) {
     console.error('Error generating meme:', error);
     res.status(500).json({ error: error.message || 'Internal server error' });
