@@ -35,9 +35,9 @@ app.post('/api/generate-meme', async (req, res) => {
   try {
     const { imageData, prompt } = req.body;
     const apiKey = process.env.GOOGLE_API_KEY || process.env.GEMINI_API_KEY;
-    // Try different model names - nano-banana-pro-preview might not be available
-    // Fallback to standard image generation models
-    const geminiModel = process.env.GEMINI_MODEL || 'gemini-2.0-flash-exp';
+    // Use the correct model name for image generation
+    // gemini-3-pro-image-preview is the current model for Nano Banana Pro image generation
+    const geminiModel = process.env.GEMINI_MODEL || 'gemini-3-pro-image-preview';
 
     if (!apiKey) {
       return res.status(500).json({ error: 'API key not configured. Set GOOGLE_API_KEY or GEMINI_API_KEY' });
@@ -77,7 +77,7 @@ app.post('/api/generate-meme', async (req, res) => {
             topK: 40,
             topP: 0.95,
             maxOutputTokens: 8192,
-            response_modalities: ['Image']
+            response_modalities: ['IMAGE'] // Use uppercase IMAGE
           }
         })
       }
