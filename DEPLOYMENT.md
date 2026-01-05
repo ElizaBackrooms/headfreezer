@@ -4,14 +4,18 @@ This guide walks you through deploying the backend on Render and the frontend on
 
 ## Step 1: Deploy Backend on Render
 
-1. **Push your code to GitHub** (if you haven't already)
+1. **Push your code to GitHub:**
+   ```bash
+   git push -u origin main
+   ```
+   Your repository: https://github.com/ElizaBackrooms/headfreezer.git
 
 2. **Go to [Render Dashboard](https://dashboard.render.com)** and sign in
 
 3. **Create a New Web Service:**
    - Click "New +" → "Web Service"
-   - Connect your GitHub repository
-   - Select the repository containing this project
+   - Connect your GitHub account (if not already connected)
+   - Select the repository: `ElizaBackrooms/headfreezer`
 
 4. **Configure the service:**
    - **Name:** `heads-in-freezers-api` (or any name you prefer)
