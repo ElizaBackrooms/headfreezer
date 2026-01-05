@@ -1,4 +1,4 @@
-from fastapi import FastAPI, File, UploadFile, HTTPException, Form
+from fastapi import FastAPI, File, UploadFile, HTTPException, Form, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 import google.generativeai as genai
@@ -18,11 +18,6 @@ from concurrent.futures import ThreadPoolExecutor
 from utils.prompts import get_fridge_meme_prompt
 
 
-class MemeRequest(BaseModel):
-    imageData: str
-    prompt: Optional[str] = None
-
-
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -34,19 +29,32 @@ app = FastAPI(title="241543903 Meme Generator", version="1.0.0")
 # Thread pool executor for blocking I/O operations
 executor = ThreadPoolExecutor(max_workers=50, thread_name_prefix="meme_generator")
 
-# CORS middleware - Allow all origins for now
+# CORS middleware - Allow frontend domain
+frontend_url = os.getenv("FRONTEND_URL", "https://www.241543903.xyz")
+allow_origins_list = [
+    frontend_url,
+    "https://www.241543903.xyz",
+    "https://241543903.xyz",
+    "http://localhost:5173",  # Local dev
+    "http://localhost:3000",
+    "*"  # Allow all for now
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["*"],  # Allow all for compatibility
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 # Initialize Gemini / Nano Banana
+# Use new API key: AIzaSyBuzZv1Xpkqz3OCEhQWewpXiE9YRlZFnHQ
 api_key = os.getenv("GOOGLE_API_KEY") or os.getenv("GEMINI_API_KEY") or os.getenv("NANO_BANANA_API_KEY")
 if not api_key:
     raise ValueError("GOOGLE_API_KEY or GEMINI_API_KEY not found in environment variables")
+
+logger.info(f"Using API key: {api_key[:10]}... (configured)")
 
 # Configure both old and new API clients
 genai.configure(api_key=api_key)
