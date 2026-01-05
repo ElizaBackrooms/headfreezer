@@ -35,7 +35,9 @@ app.post('/api/generate-meme', async (req, res) => {
   try {
     const { imageData, prompt } = req.body;
     const apiKey = process.env.GOOGLE_API_KEY || process.env.GEMINI_API_KEY;
-    const geminiModel = process.env.GEMINI_MODEL || 'nano-banana-pro-preview';
+    // Try different model names - nano-banana-pro-preview might not be available
+    // Fallback to standard image generation models
+    const geminiModel = process.env.GEMINI_MODEL || 'gemini-2.0-flash-exp';
 
     if (!apiKey) {
       return res.status(500).json({ error: 'API key not configured. Set GOOGLE_API_KEY or GEMINI_API_KEY' });
@@ -84,9 +86,24 @@ app.post('/api/generate-meme', async (req, res) => {
     const data = await response.json();
 
     if (!response.ok) {
-      console.error('Gemini API Error:', data);
+      console.error('Gemini API Error:', JSON.stringify(data, null, 2));
+      const errorMessage = data.error?.message || data.error || 'Failed to generate image';
+      
+      // Check for specific error types
+      if (errorMessage.includes('API key') || errorMessage.includes('permission') || errorMessage.includes('denied')) {
+        return res.status(403).json({ 
+          error: 'API key issue. Please check: 1) Key is correct, 2) API is enabled in Google Cloud Console, 3) Key has proper permissions for Gemini API'
+        });
+      }
+      
+      if (errorMessage.includes('model') || errorMessage.includes('not found')) {
+        return res.status(400).json({ 
+          error: `Model "${geminiModel}" not found. Try setting GEMINI_MODEL to a valid model like "gemini-2.0-flash-exp" or "gemini-1.5-pro"`
+        });
+      }
+      
       return res.status(response.status).json({ 
-        error: data.error?.message || data.error || 'Failed to generate image' 
+        error: errorMessage
       });
     }
 
