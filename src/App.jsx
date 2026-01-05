@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Upload, Loader2, Download, Info } from 'lucide-react';
+import { Upload, Loader2, Download, Info, ExternalLink, BookOpen } from 'lucide-react';
 
 export default function HeadsInFreezersApp() {
   const [uploadedImage, setUploadedImage] = useState(null);
@@ -91,6 +91,36 @@ export default function HeadsInFreezersApp() {
             241543903 Meme Generator
           </h1>
           <p className="text-gray-600">Transform your photo into the viral "Heads in Freezers" meme</p>
+        </div>
+
+        {/* Know Your Meme Section */}
+        <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-2xl shadow-xl p-6 mb-6 border border-purple-200">
+          <div className="flex items-start gap-3 mb-4">
+            <BookOpen className="w-6 h-6 text-purple-600 flex-shrink-0 mt-1" />
+            <div className="flex-1">
+              <h2 className="text-2xl font-bold text-gray-800 mb-3">Know Your Meme: 241543903</h2>
+              <div className="space-y-3 text-gray-700">
+                <p>
+                  The <strong>241543903</strong> meme, also known as "Heads in Freezers," is a viral internet phenomenon where people photograph themselves with their heads inside refrigerators or freezers and tag the images with the number "241543903."
+                </p>
+                <p>
+                  This bizarre trend gained popularity on social media platforms, with thousands of people participating by sharing their own "heads in freezers" photos. The origin and meaning of the specific number remain mysterious, adding to the meme's intrigue.
+                </p>
+                <p className="text-sm text-gray-600 italic">
+                  The meme became so popular that it even caught the attention of major brands and celebrities, with many joining in on the trend.
+                </p>
+              </div>
+              <a
+                href="https://knowyourmeme.com/memes/241543903-heads-in-freezers"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 mt-4 px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors font-medium"
+              >
+                <ExternalLink className="w-4 h-4" />
+                Read More on Know Your Meme
+              </a>
+            </div>
+          </div>
         </div>
 
         <div className="bg-white rounded-2xl shadow-xl p-6 mb-6">
