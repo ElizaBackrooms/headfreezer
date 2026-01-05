@@ -135,7 +135,7 @@ export default function HeadsInFreezersApp() {
             href="https://www.google.com/search?q=241543903"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-white bg-opacity-90 text-gray-800 rounded-lg hover:bg-opacity-100 transition-all font-medium shadow-lg"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-white bg-opacity-70 text-gray-800 rounded-lg hover:bg-opacity-80 transition-all font-medium shadow-lg backdrop-blur-sm"
           >
             <Search className="w-5 h-5" />
             Search "241543903" on Google
@@ -143,7 +143,7 @@ export default function HeadsInFreezersApp() {
         </div>
 
         {/* YouTube Video Embed */}
-        <div className="mb-6 bg-white bg-opacity-95 rounded-2xl shadow-xl p-4">
+        <div className="mb-6 bg-white bg-opacity-60 rounded-2xl shadow-xl p-4 backdrop-blur-sm">
           <div className="aspect-video w-full rounded-lg overflow-hidden">
             <iframe
               width="100%"
@@ -160,7 +160,7 @@ export default function HeadsInFreezersApp() {
         </div>
 
         {/* Know Your Meme Section - NO PURPLE/PINK GRADIENTS */}
-        <div className="bg-white bg-opacity-95 rounded-2xl shadow-xl p-6 mb-6 border border-gray-200">
+        <div className="bg-white bg-opacity-60 rounded-2xl shadow-xl p-6 mb-6 border border-gray-200 backdrop-blur-sm">
           <div className="flex items-start gap-3 mb-4">
             <BookOpen className="w-6 h-6 text-blue-600 flex-shrink-0 mt-1" />
             <div className="flex-1">
@@ -189,8 +189,8 @@ export default function HeadsInFreezersApp() {
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-xl p-6 mb-6">
-          <div className="flex items-start gap-2 bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+        <div className="bg-white bg-opacity-60 rounded-2xl shadow-xl p-6 mb-6 backdrop-blur-sm">
+          <div className="flex items-start gap-2 bg-blue-50 bg-opacity-60 border border-blue-200 rounded-lg p-4 mb-6 backdrop-blur-sm">
             <Info className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
             <div className="text-sm text-blue-800">
               <strong>About 241543903:</strong> This viral meme involves people photographing themselves with their heads inside freezers, then uploading the images with the tag "241543903". Try it yourself!
@@ -250,7 +250,7 @@ export default function HeadsInFreezersApp() {
         </div>
 
         {resultImage && (
-          <div className="bg-white rounded-2xl shadow-xl p-6">
+          <div className="bg-white bg-opacity-60 rounded-2xl shadow-xl p-6 backdrop-blur-sm">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-xl font-semibold text-gray-800">Your 241543903 Meme:</h3>
               <button
