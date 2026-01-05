@@ -5,7 +5,7 @@
 Set these in your Render dashboard (Settings → Environment):
 
 ```
-GOOGLE_API_KEY=AIzaSyBkB8iyB_p75LY0w1dlCpc2WUI_7AzAWdo
+GOOGLE_API_KEY=your_api_key_here
 GEMINI_MODEL=nano-banana-pro-preview
 FRONTEND_URL=https://www.241543903.xyz
 ```
