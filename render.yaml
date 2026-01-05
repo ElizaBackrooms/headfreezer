@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: heads-in-freezers-api
+    env: node
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: GEMINI_API_KEY
+        sync: false
+    healthCheckPath: /api/generate-meme
+
