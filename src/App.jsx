@@ -72,17 +72,22 @@ export default function HeadsInFreezersApp() {
       }
 
       if (data.candidates && data.candidates[0]?.content?.parts) {
-        const imagePart = data.candidates[0].content.parts.find(
-          part => part.inlineData
-        );
+        const parts = data.candidates[0].content.parts;
+        const imagePart = parts.find(part => part.inlineData);
+        const textPart = parts.find(part => part.text);
         
         if (imagePart) {
           const generatedImage = `data:${imagePart.inlineData.mimeType};base64,${imagePart.inlineData.data}`;
           setResultImage(generatedImage);
+        } else if (textPart) {
+          // Log what Gemini actually returned
+          console.log('Gemini returned text:', textPart.text);
+          throw new Error(`Gemini returned text instead of an image: "${textPart.text.substring(0, 100)}..."`);
         } else {
           throw new Error('No image was generated. Gemini may have returned text instead.');
         }
       } else {
+        console.error('Unexpected response format:', data);
         throw new Error('Unexpected response format from Gemini API');
       }
     } catch (err) {
