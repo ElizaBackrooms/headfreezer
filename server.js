@@ -8,8 +8,17 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Configure CORS to allow requests from your frontend domain
+const allowedOrigins = process.env.FRONTEND_URL 
+  ? process.env.FRONTEND_URL.split(',').map(url => url.trim())
+  : ['http://localhost:5173', 'https://www.241543903.xyz', 'https://241543903.xyz'];
+
 const corsOptions = {
-  origin: process.env.FRONTEND_URL || ['http://localhost:5173', 'https://www.241543903.xyz'], // Allow localhost for dev
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    // Allow all origins for now - can restrict later if needed
+    callback(null, true);
+  },
   credentials: true,
   optionsSuccessStatus: 200
 };
