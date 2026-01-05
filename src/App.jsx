@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Upload, Loader2, Download, Info, ExternalLink, BookOpen } from 'lucide-react';
+import { Upload, Loader2, Download, Info, ExternalLink, BookOpen, Search } from 'lucide-react';
 
 export default function HeadsInFreezersApp() {
   const [uploadedImage, setUploadedImage] = useState(null);
@@ -47,7 +47,25 @@ export default function HeadsInFreezersApp() {
         })
       });
 
-      const data = await response.json();
+      // Check if response has content before parsing
+      const contentType = response.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        const text = await response.text();
+        throw new Error(`Server returned non-JSON response: ${text.substring(0, 100)}`);
+      }
+
+      // Check if response body is empty
+      const text = await response.text();
+      if (!text || text.trim() === '') {
+        throw new Error('Server returned empty response. Make sure the backend server is running.');
+      }
+
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch (parseError) {
+        throw new Error(`Failed to parse JSON response: ${text.substring(0, 200)}`);
+      }
 
       if (!response.ok) {
         throw new Error(data.error || 'Failed to generate image');
@@ -68,7 +86,12 @@ export default function HeadsInFreezersApp() {
         throw new Error('Unexpected response format from Gemini API');
       }
     } catch (err) {
-      setError(err.message || 'Failed to generate meme. Please try again.');
+      console.error('Error generating meme:', err);
+      if (err.message.includes('Failed to fetch') || err.message.includes('NetworkError')) {
+        setError('Cannot connect to server. Make sure the backend is running at ' + API_ENDPOINT);
+      } else {
+        setError(err.message || 'Failed to generate meme. Please try again.');
+      }
     } finally {
       setLoading(false);
     }
@@ -102,13 +125,39 @@ export default function HeadsInFreezersApp() {
           <h1 className="text-4xl font-bold text-white mb-2 drop-shadow-lg">
             241543903 Meme Generator
           </h1>
-          <p className="text-white drop-shadow-md">Transform your photo into the viral "Heads in Freezers" meme</p>
+          <p className="text-white drop-shadow-md mb-4">Transform your photo into the viral "Heads in Freezers" meme</p>
+          <a
+            href="https://www.google.com/search?q=241543903"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-white bg-opacity-90 text-gray-800 rounded-lg hover:bg-opacity-100 transition-all font-medium shadow-lg"
+          >
+            <Search className="w-5 h-5" />
+            Search "241543903" on Google
+          </a>
         </div>
 
-        {/* Know Your Meme Section */}
-        <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-2xl shadow-xl p-6 mb-6 border border-purple-200">
+        {/* YouTube Video Embed */}
+        <div className="mb-6 bg-white bg-opacity-95 rounded-2xl shadow-xl p-4">
+          <div className="aspect-video w-full rounded-lg overflow-hidden">
+            <iframe
+              width="100%"
+              height="100%"
+              src="https://www.youtube.com/embed/IMNmz7mUUZI?si=_agVNBtYENQ5H3CQ&start=1"
+              title="YouTube video player"
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerPolicy="strict-origin-when-cross-origin"
+              allowFullScreen
+              className="w-full h-full"
+            ></iframe>
+          </div>
+        </div>
+
+        {/* Know Your Meme Section - NO PURPLE/PINK GRADIENTS */}
+        <div className="bg-white bg-opacity-95 rounded-2xl shadow-xl p-6 mb-6 border border-gray-200">
           <div className="flex items-start gap-3 mb-4">
-            <BookOpen className="w-6 h-6 text-purple-600 flex-shrink-0 mt-1" />
+            <BookOpen className="w-6 h-6 text-blue-600 flex-shrink-0 mt-1" />
             <div className="flex-1">
               <h2 className="text-2xl font-bold text-gray-800 mb-3">Know Your Meme: 241543903</h2>
               <div className="space-y-3 text-gray-700">
@@ -126,7 +175,7 @@ export default function HeadsInFreezersApp() {
                 href="https://knowyourmeme.com/memes/241543903-heads-in-freezers"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 mt-4 px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors font-medium"
+                className="inline-flex items-center gap-2 mt-4 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
               >
                 <ExternalLink className="w-4 h-4" />
                 Read More on Know Your Meme

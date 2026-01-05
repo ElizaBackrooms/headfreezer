@@ -9,7 +9,7 @@ const PORT = process.env.PORT || 3000;
 
 // Configure CORS to allow requests from your frontend domain
 const corsOptions = {
-  origin: process.env.FRONTEND_URL || '*', // Set your Namecheap domain here
+  origin: process.env.FRONTEND_URL || ['http://localhost:5173', 'https://www.241543903.xyz'], // Allow localhost for dev
   credentials: true,
   optionsSuccessStatus: 200
 };

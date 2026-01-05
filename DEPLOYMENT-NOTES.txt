@@ -1,0 +1,27 @@
+IMPORTANT: Frontend Build Instructions
+========================================
+
+Your frontend has been built and zipped (frontend-build.zip), BUT:
+
+⚠️  You MUST rebuild the frontend AFTER you deploy to Render and get your Render URL!
+
+The current build contains a placeholder API URL that needs to be replaced.
+
+Steps:
+1. Deploy backend to Render (get your Render URL, e.g., https://heads-in-freezers-api.onrender.com)
+2. Rebuild the frontend with your actual Render URL:
+   
+   Windows:
+   build-for-namecheap.bat https://your-actual-render-url.onrender.com
+   
+   Or manually:
+   $env:VITE_API_URL="https://your-actual-render-url.onrender.com/api/generate-meme"; npm run build
+
+3. Create a new zip from the dist folder
+4. Upload to Namecheap
+
+Your domain: www.241543903.xyz
+
+The server.js has been updated with your domain for CORS settings.
+Make sure to set FRONTEND_URL=https://www.241543903.xyz in Render environment variables.
+
