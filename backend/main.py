@@ -59,9 +59,12 @@ logger.info(f"Using API key: {api_key[:10]}... (configured)")
 # Configure both old and new API clients
 genai.configure(api_key=api_key)
 
-# Use gemini-3-pro-image-preview for image generation
+# Use Nano Banana Pro model for image generation
+# Try gemini-3-pro-image-preview (Nano Banana Pro) or fallback to gemini-2.0-flash-exp
 IMAGE_MODEL = os.getenv("GEMINI_MODEL", "gemini-3-pro-image-preview")
 VISION_MODEL = os.getenv("VISION_MODEL", "gemini-1.5-pro")
+
+logger.info(f"Image generation model: {IMAGE_MODEL} (Nano Banana Pro)")
 
 # Initialize the new Genai client for image generation
 try:

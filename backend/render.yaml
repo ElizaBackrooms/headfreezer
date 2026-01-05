@@ -9,6 +9,7 @@ services:
         sync: false
       - key: GEMINI_MODEL
         value: gemini-3-pro-image-preview
+      # Note: gemini-3-pro-image-preview is the Nano Banana Pro model for image generation
       - key: FRONTEND_URL
         value: https://www.241543903.xyz
       - key: PYTHON_VERSION
