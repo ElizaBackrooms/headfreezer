@@ -84,13 +84,25 @@ export default function HeadsInFreezersApp() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-cyan-50 to-blue-100 p-6">
-      <div className="max-w-4xl mx-auto">
+    <div 
+      className="min-h-screen p-6 relative"
+      style={{
+        backgroundImage: 'url(/241543903.jpg)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        backgroundAttachment: 'fixed'
+      }}
+    >
+      {/* Overlay for better text readability */}
+      <div className="absolute inset-0 bg-black bg-opacity-40"></div>
+      
+      <div className="max-w-4xl mx-auto relative z-10">
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-800 mb-2">
+          <h1 className="text-4xl font-bold text-white mb-2 drop-shadow-lg">
             241543903 Meme Generator
           </h1>
-          <p className="text-gray-600">Transform your photo into the viral "Heads in Freezers" meme</p>
+          <p className="text-white drop-shadow-md">Transform your photo into the viral "Heads in Freezers" meme</p>
         </div>
 
         {/* Know Your Meme Section */}
