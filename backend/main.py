@@ -49,7 +49,7 @@ app.add_middleware(
 )
 
 # Initialize Gemini / Nano Banana
-# Use new API key: AIzaSyBuzZv1Xpkqz3OCEhQWewpXiE9YRlZFnHQ
+# API key should be set via environment variables (GOOGLE_API_KEY or GEMINI_API_KEY)
 api_key = os.getenv("GOOGLE_API_KEY") or os.getenv("GEMINI_API_KEY") or os.getenv("NANO_BANANA_API_KEY")
 if not api_key:
     raise ValueError("GOOGLE_API_KEY or GEMINI_API_KEY not found in environment variables")

@@ -9,7 +9,7 @@ The backend uses Python FastAPI with Google Gemini API for image generation. It'
 Set these in Render:
 
 ```
-GOOGLE_API_KEY=AIzaSyBuzZv1Xpkqz3OCEhQWewpXiE9YRlZFnHQ
+GOOGLE_API_KEY=your_api_key_here
 GEMINI_MODEL=gemini-3-pro-image-preview
 FRONTEND_URL=https://www.241543903.xyz
 PYTHON_VERSION=3.11.0
@@ -35,7 +35,7 @@ pip install -r requirements.txt
 
 4. Create `.env` file:
 ```env
-GOOGLE_API_KEY=AIzaSyBuzZv1Xpkqz3OCEhQWewpXiE9YRlZFnHQ
+GOOGLE_API_KEY=your_api_key_here
 GEMINI_MODEL=gemini-3-pro-image-preview
 FRONTEND_URL=http://localhost:5173
 ```
